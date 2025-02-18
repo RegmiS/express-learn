@@ -5,3 +5,4 @@ create .env file in root directory with the information from mongodb database ur
 DATABASE_URL="mongodb+srv://<username>:<password>@<clustername>"
 ```
 
+node populatedb.js "mongodb url"
