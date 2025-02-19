@@ -6,8 +6,11 @@ var logger = require('morgan');
 require('dotenv').config();
 const mongoose = require("mongoose");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const wikiRouter = require("./routes/wiki.js");
+const catalogRouter = require("./routes/catalog"); //Import routes for "catalog" area of site
+
 
 var app = express();
 
@@ -23,6 +26,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/wiki', wikiRouter);
+app.use("/catalog", catalogRouter); // Add catalog routes to middleware chain.
 
 mongoose.set("strictQuery", false);
 const uri = process.env.DATABASE_URL;
