@@ -11,12 +11,29 @@ const usersRouter = require('./routes/users');
 const wikiRouter = require("./routes/wiki.js");
 const catalogRouter = require("./routes/catalog"); //Import routes for "catalog" area of site
 
+mongoose.set("strictQuery", false);
+const uri = process.env.DATABASE_URL;
+
+const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
+async function run() {
+  try {
+    // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
+    await mongoose.connect(uri, clientOptions);
+    await mongoose.connection.db.admin().command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } catch {
+    // Ensures that the client will close when you finish/error
+    console.log("disconnected from mongodb");
+    await mongoose.disconnect();
+  }
+}
+run().catch(console.dir);
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -29,22 +46,7 @@ app.use('/users', usersRouter);
 app.use('/wiki', wikiRouter);
 app.use("/catalog", catalogRouter); // Add catalog routes to middleware chain.
 
-mongoose.set("strictQuery", false);
-const uri = process.env.DATABASE_URL;
 
-const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
-async function run() {
-  try {
-    // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
-    await mongoose.connect(uri, clientOptions);
-    await mongoose.connection.db.admin().command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await mongoose.disconnect();
-  }
-}
-run().catch(console.dir);
 
 
 // catch 404 and forward to error handler
