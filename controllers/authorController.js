@@ -9,6 +9,10 @@ exports.author_list = asyncHandler(async (req, res, next) => {
     title: "Author List",
     author_list: allAuthors,
   });
+  // for (let index = 0; index < allAuthors.length; index++) {
+  //   const element = allAuthors[index].date_of_birth;
+  //   console.log(element);
+  // }
 });
 
 // Display detail page for a specific Author.

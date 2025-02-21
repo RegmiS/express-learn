@@ -29,13 +29,18 @@ AuthorSchema.virtual("url").get(function () {
 });
 
 AuthorSchema.virtual("dob").get(function () {
+    if (this.date_of_birth == undefined){
+        return "Unknown";
+    }
     return DateTime.fromJSDate(this.date_of_birth).toLocaleString(DateTime.DATE_MED);
 });
 
-// AuthorSchema.virtual("dod").get(function () {
-//     return this.date_of_death;
-//     // return DateTime.fromJSDate(this.date_of_death).toLocaleString(DateTime.DATE_MED);
-// });
+AuthorSchema.virtual("dod").get(function () {
+    if (this.date_of_death == null){
+        return "Current";
+    }
+    return DateTime.fromJSDate(this.date_of_death).toLocaleString(DateTime.DATE_MED);
+});
 
 // Export model
 module.exports = mongoose.model("Author", AuthorSchema);
